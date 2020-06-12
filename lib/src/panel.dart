@@ -134,6 +134,10 @@ class SlidingUpPanel extends StatefulWidget {
   /// If non-null, this callback is called when the panel
   /// is fully collapsed.
   final VoidCallback onPanelClosed;
+  
+  /// If non-null, this callback is called when the backdrop
+  /// is tapped.
+  final VoidCallback onBackdropTap;
 
   /// If non-null and true, the SlidingUpPanel exhibits a
   /// parallax effect as the panel slides up. Essentially,
@@ -193,6 +197,7 @@ class SlidingUpPanel extends StatefulWidget {
     this.onPanelSlide,
     this.onPanelOpened,
     this.onPanelClosed,
+    this.onBackdropTap,
     this.parallaxEnabled = false,
     this.parallaxOffset = 0.1,
     this.isDraggable = true,
@@ -277,7 +282,9 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
             if((widget.slideDirection == SlideDirection.UP ? 1 : -1) * dets.velocity.pixelsPerSecond.dy > 0)
               _close();
           } : null,
-          onTap: widget.backdropTapClosesPanel ? () => _close() : null,
+          onTap: widget.onBackdropTap != null
+            ? widget.onBackdropTap()
+            : widget.backdropTapClosesPanel ? () => _close() : null,
           child: AnimatedBuilder(
             animation: _ac,
             builder: (context, _) {
