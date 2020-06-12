@@ -283,7 +283,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
               _close();
           } : null,
           onTap: widget.onBackdropTap != null
-            ? widget.onBackdropTap()
+            ? widget.onBackdropTap
             : widget.backdropTapClosesPanel ? () => _close() : null,
           child: AnimatedBuilder(
             animation: _ac,
