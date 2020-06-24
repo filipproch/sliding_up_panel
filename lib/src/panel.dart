@@ -407,7 +407,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
 
     if (widget.panel != null){
       return GestureDetector(
-        onVerticalDragUpdate: (DragUpdateDetails dets) => _onGestureSlide(dets.delta.dy),
+        onVerticalDragUpdate: (DragUpdateDetails dets) => _onGestureSlide(dets.delta.dx, dets.delta.dy),
         onVerticalDragEnd: (DragEndDetails dets) => _onGestureEnd(dets.velocity),
         child: child,
       );
@@ -417,7 +417,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
       onPointerDown: (PointerDownEvent p) => _vt.addPosition(p.timeStamp, p.position),
       onPointerMove: (PointerMoveEvent p){
         _vt.addPosition(p.timeStamp, p.position); // add current position for velocity tracking
-        _onGestureSlide(p.delta.dy);
+        _onGestureSlide(p.delta.dx, p.delta.dy);
       },
       onPointerUp: (PointerUpEvent p) => _onGestureEnd(_vt.getVelocity()),
       child: child,
@@ -425,7 +425,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
   }
 
   // handles the sliding gesture
-  void _onGestureSlide(double dy){
+  void _onGestureSlide(double dx, double dy){
     if (!_draggingEnabled) {
       return;
     }
