@@ -134,7 +134,7 @@ class SlidingUpPanel extends StatefulWidget {
   /// If non-null, this callback is called when the panel
   /// is fully collapsed.
   final VoidCallback onPanelClosed;
-  
+
   /// If non-null, this callback is called when the backdrop
   /// is tapped.
   final VoidCallback onBackdropTap;
@@ -221,6 +221,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
   ScrollController _sc;
   bool _scrollingEnabled = false;
   VelocityTracker _vt = new VelocityTracker();
+  bool _draggingEnabled = true;
 
   bool _isPanelVisible = true;
 
@@ -425,6 +426,9 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
 
   // handles the sliding gesture
   void _onGestureSlide(double dy){
+    if (!_draggingEnabled) {
+      return;
+    }
 
     // only slide the panel if scrolling is not enabled
     if(!_scrollingEnabled){
@@ -450,6 +454,10 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
 
   // handles when user stops sliding
   void _onGestureEnd(Velocity v){
+    if (!_draggingEnabled) {
+      return;
+    }
+
     double minFlingVelocity = 365.0;
     double kSnap = 8;
 
@@ -532,6 +540,10 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
   //---------------------------------
   //PanelController related functions
   //---------------------------------
+
+  void _setDraggable(bool isDraggable) {
+    _draggingEnabled = isDraggable;
+  }
 
   //close the panel
   Future<void> _close(){
@@ -623,6 +635,13 @@ class PanelController{
   /// of the SlidingUpPanel (this property must return true before any other
   /// functions can be used)
   bool get isAttached => _panelState != null;
+
+
+  void setDraggable(bool isDraggable) {
+    assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
+    assert(isDraggable != null);
+    _panelState._setDraggable(isDraggable);
+  }
 
   /// Closes the sliding panel to its collapsed state (i.e. to the  minHeight)
   Future<void> close(){
