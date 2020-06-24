@@ -543,6 +543,9 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
 
   void _setDraggable(bool isDraggable) {
     _draggingEnabled = isDraggable;
+    if (!isDraggable) {
+      _open();
+    }
   }
 
   //close the panel
