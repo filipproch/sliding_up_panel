@@ -265,6 +265,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
           builder: (context, child){
             return Positioned(
               top: widget.parallaxEnabled ? _getParallax() : 0.0,
+              bottom: 0.0,
               child: child,
             );
           },
